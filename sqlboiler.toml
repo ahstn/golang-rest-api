@@ -1,0 +1,6 @@
+[postgres]
+dbname = "flight"
+user   = "boiler"
+pass   = "boiler"
+host   = "localhost"
+sslmode = "disable"
