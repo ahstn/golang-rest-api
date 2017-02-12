@@ -1,5 +1,8 @@
+# Go Rest API
+Example Rest API in Go using [Gin], [SqlBoiler], [Log15] and [Postgres]
+
 ## Todo
-- [ ] Basic CRUD Functionality
+- [x] Basic CRUD Functionality
 - [ ] Get entity relationship data
 - [ ] Validation of input
 - [ ] API Auth
@@ -9,3 +12,8 @@
 - [ ] Encrypted payloads/json ?
 - [ ] Containerise binary
 - [ ] Review logging (unify output if possible)
+
+[Gin]: https://github.com/gin-gonic/gin
+[SqlBoiler]: https://github.com/vattle/sqlboiler
+[Log15]: https://github.com/inconshreveable/log15
+[Postgres]: https://github.com/postgres/postgres
