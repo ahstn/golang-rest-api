@@ -44,5 +44,12 @@ func main() {
 		daos.Update(id, json.Name, db, log)
 	})
 
+	r.DELETE("/pilots/:id", func(c *gin.Context) {
+		paramID := c.Param("id")
+
+		id, _ := strconv.Atoi(paramID)
+		daos.Delete(id, db, log)
+	})
+
 	r.Run(":8080")
 }

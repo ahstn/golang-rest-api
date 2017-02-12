@@ -41,3 +41,14 @@ func Update(id int, name string, db *sql.DB, log log15.Logger) int {
 	log.Info("db: updated pilot", "id", id)
 	return id
 }
+
+func Delete(id int, db *sql.DB, log log15.Logger) int {
+	pilot, _ := models.FindPilot(db, id)
+	if err := pilot.Delete(db); err != nil {
+		log.Error("db: failed to delete pilot", "id", id, "err", err)
+		return 0
+	}
+
+	log.Info("db: deleted pilot", "id", id)
+	return id
+}
