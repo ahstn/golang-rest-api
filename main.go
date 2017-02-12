@@ -3,6 +3,8 @@ package main
 //go:generate sqlboiler postgres
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"github.com/phazyy/golang-rest-api/daos"
@@ -25,10 +27,21 @@ func main() {
 	r.POST("/pilots", func(c *gin.Context) {
 		var json models.Pilot
 		if c.BindJSON(&json) != nil {
-			log.Error("gin: error creating user")
+			log.Error("gin: error creating creating")
 		}
 
 		daos.Create(json.Name, db, log)
+	})
+
+	r.PUT("/pilots/:id", func(c *gin.Context) {
+		paramID := c.Param("id")
+		var json models.Pilot
+		if c.BindJSON(&json) != nil {
+			log.Error("gin: error updating pilot")
+		}
+
+		id, _ := strconv.Atoi(paramID)
+		daos.Update(id, json.Name, db, log)
 	})
 
 	r.Run(":8080")

@@ -30,3 +30,14 @@ func Create(name string, db *sql.DB, log log15.Logger) int {
 	log.Info("db: insterted pilot", "id", pilot.ID)
 	return pilot.ID
 }
+
+func Update(id int, name string, db *sql.DB, log log15.Logger) int {
+	pilot, _ := models.FindPilot(db, id)
+	pilot.Name = name
+	if err := pilot.Update(db); err != nil {
+		log.Error("db: failed to update pilot", "id", id, "err", err)
+	}
+
+	log.Info("db: updated pilot", "id", id)
+	return id
+}
