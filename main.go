@@ -16,12 +16,19 @@ var log = log15.New()
 
 func main() {
 	r := gin.Default()
-
 	db := daos.Open(log)
 
 	r.GET("/pilots", func(c *gin.Context) {
 		pilots := daos.GetAll(db, log)
 		c.JSON(200, pilots)
+	})
+
+	r.GET("/pilots/:id", func(c *gin.Context) {
+		paramID := c.Param("id")
+		id, _ := strconv.Atoi(paramID)
+
+		pilot := daos.Get(id, db, log)
+		c.JSON(200, pilot)
 	})
 
 	r.POST("/pilots", func(c *gin.Context) {

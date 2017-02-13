@@ -7,6 +7,19 @@ import (
 	"gopkg.in/inconshreveable/log15.v2"
 )
 
+// Get : Attempts to fetch a single pilot matching passed ID
+func Get(id int, db *sql.DB, log log15.Logger) *models.Pilot {
+	pilot, err := models.FindPilot(db, id)
+	if err != nil {
+		log.Error("db: failed to get pilot", "id", id)
+		return nil
+	}
+
+	log.Info("db: fetched pilot", "id", id)
+	return pilot
+}
+
+// GetAll : Get all pilots
 func GetAll(db *sql.DB, log log15.Logger) models.PilotSlice {
 	pilots, err := models.Pilots(db).All()
 	if err != nil {
@@ -18,6 +31,7 @@ func GetAll(db *sql.DB, log log15.Logger) models.PilotSlice {
 	return pilots
 }
 
+// Create : Create pilot with the passed name string
 func Create(name string, db *sql.DB, log log15.Logger) int {
 	pilot := &models.Pilot{
 		Name: name,
@@ -31,6 +45,7 @@ func Create(name string, db *sql.DB, log log15.Logger) int {
 	return pilot.ID
 }
 
+// Update : Attempts to update the pilot matching the passed id
 func Update(id int, name string, db *sql.DB, log log15.Logger) int {
 	pilot, _ := models.FindPilot(db, id)
 	pilot.Name = name
@@ -42,6 +57,7 @@ func Update(id int, name string, db *sql.DB, log log15.Logger) int {
 	return id
 }
 
+// Delete : Attempts to delete the pilot matching the passed id
 func Delete(id int, db *sql.DB, log log15.Logger) int {
 	pilot, _ := models.FindPilot(db, id)
 	if err := pilot.Delete(db); err != nil {
