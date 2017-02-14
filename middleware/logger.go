@@ -19,9 +19,9 @@ var (
 )
 
 // Logger : Custom middleware for unifing application and gin logs
-// disabled atm
 func Logger(log log15.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Set("logger", log)
 		c.Next()
 
 		statusColor := colorForStatus(c.Writer.Status())

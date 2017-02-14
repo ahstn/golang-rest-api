@@ -3,12 +3,10 @@ package main
 //go:generate sqlboiler postgres
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"github.com/phazyy/golang-rest-api/daos"
-	"github.com/phazyy/golang-rest-api/models"
+	"github.com/phazyy/golang-rest-api/middleware"
+	"github.com/phazyy/golang-rest-api/routes"
 	"gopkg.in/inconshreveable/log15.v2"
 )
 
@@ -16,47 +14,19 @@ var log = log15.New()
 
 func main() {
 	r := gin.Default()
-	db := daos.Open(log)
+	r.Use(middleware.Logger(log))
+	r.Use(middleware.Database(log))
 
-	r.GET("/pilots", func(c *gin.Context) {
-		pilots := daos.GetAll(db, log)
-		c.JSON(200, pilots)
-	})
+	v1 := r.Group("/v1")
+	{
+		pilot := new(routes.PilotRoutes)
 
-	r.GET("/pilots/:id", func(c *gin.Context) {
-		paramID := c.Param("id")
-		id, _ := strconv.Atoi(paramID)
-
-		pilot := daos.Get(id, db, log)
-		c.JSON(200, pilot)
-	})
-
-	r.POST("/pilots", func(c *gin.Context) {
-		var json models.Pilot
-		if c.BindJSON(&json) != nil {
-			log.Error("gin: error creating creating")
-		}
-
-		daos.Create(json.Name, db, log)
-	})
-
-	r.PUT("/pilots/:id", func(c *gin.Context) {
-		paramID := c.Param("id")
-		var json models.Pilot
-		if c.BindJSON(&json) != nil {
-			log.Error("gin: error updating pilot")
-		}
-
-		id, _ := strconv.Atoi(paramID)
-		daos.Update(id, json.Name, db, log)
-	})
-
-	r.DELETE("/pilots/:id", func(c *gin.Context) {
-		paramID := c.Param("id")
-
-		id, _ := strconv.Atoi(paramID)
-		daos.Delete(id, db, log)
-	})
+		v1.GET("/pilots", pilot.GetAll)
+		v1.GET("/pilots/:id", pilot.Get)
+		v1.POST("/pilots", pilot.Create)
+		v1.PUT("/pilots/:id", pilot.Update)
+		v1.DELETE("/pilots/:id", pilot.Delete)
+	}
 
 	r.Run(":8080")
 }
