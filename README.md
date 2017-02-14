@@ -11,7 +11,7 @@ Example Rest API in Go using [Gin], [SqlBoiler], [Log15] and [Postgres]
 - [ ] Handling encrypted fields (e.g. Passwords)
 - [ ] Encrypted payloads/json ?
 - [ ] Containerise binary
-- [ ] Review logging (unify output if possible)
+- [x] Review logging (unify output if possible)
 
 [Gin]: https://github.com/gin-gonic/gin
 [SqlBoiler]: https://github.com/vattle/sqlboiler

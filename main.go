@@ -28,5 +28,12 @@ func main() {
 		v1.DELETE("/pilots/:id", pilot.Delete)
 	}
 
+	r.NoRoute(func(c *gin.Context) {
+		c.JSON(404, gin.H{
+			"status":  "404",
+			"message": "Not Found.",
+		})
+	})
+
 	r.Run(":8080")
 }
