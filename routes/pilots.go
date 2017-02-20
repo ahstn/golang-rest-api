@@ -61,6 +61,7 @@ func (route PilotRoutes) Create(c *gin.Context) {
 	}
 
 	log.Info("db: insterted pilot", "id", pilot.ID)
+	c.JSON(200, gin.H{"message": "Article created", "id": pilot.ID})
 }
 
 // Update : Attempts to update the pilot matching the passed id
