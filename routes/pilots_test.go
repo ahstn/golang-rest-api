@@ -1,4 +1,4 @@
-package tests
+package routes_test
 
 import (
 	"bytes"
@@ -26,7 +26,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(middleware.Logger(log))
 	r.Use(middleware.Database(log))
-	gin.SetMode(gin.TestMode)
+	gin.SetMode(gin.DebugMode)
 
 	v1 := r.Group("/v1")
 	{
@@ -39,6 +39,11 @@ func SetupRouter() *gin.Engine {
 		v1.DELETE("/pilots/:id", pilot.Delete)
 	}
 	return r
+}
+
+func main() {
+	r := SetupRouter()
+	r.Run()
 }
 
 // TestCreatePilot : Assert pilot creation - must return 200
@@ -76,7 +81,7 @@ func TestCreatePilot(t *testing.T) {
 func TestGetPilot(t *testing.T) {
 	testRouter := SetupRouter()
 
-	url := fmt.Sprintf("/v1/pilot/%d", pilotID)
+	url := fmt.Sprintf("/v1/pilots/%d", pilotID)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -92,7 +97,7 @@ func TestGetPilot(t *testing.T) {
 func TestDeletePilot(t *testing.T) {
 	testRouter := SetupRouter()
 
-	url := fmt.Sprintf("/v1/pilot/%d", pilotID)
+	url := fmt.Sprintf("/v1/pilots/%d", pilotID)
 	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		fmt.Println(err)
