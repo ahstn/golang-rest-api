@@ -26,7 +26,7 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	r.Use(middleware.Logger(log))
 	r.Use(middleware.Database(log))
-	gin.SetMode(gin.DebugMode)
+	gin.SetMode(gin.TestMode)
 
 	v1 := r.Group("/v1")
 	{
@@ -73,7 +73,7 @@ func TestCreatePilot(t *testing.T) {
 	json.Unmarshal(body, &resp)
 	pilotID = resp.ID
 
-	assert.Equal(t, res.Code, 200)
+	assert.Equal(t, res.Code, 201)
 }
 
 // TestGetPilot : Assert pilot fetch - must return 200
@@ -106,5 +106,5 @@ func TestDeletePilot(t *testing.T) {
 	res := httptest.NewRecorder()
 
 	testRouter.ServeHTTP(res, req)
-	assert.Equal(t, res.Code, 200)
+	assert.Equal(t, res.Code, 204)
 }

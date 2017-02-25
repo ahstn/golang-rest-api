@@ -23,6 +23,8 @@ func (route PilotRoutes) Get(c *gin.Context) {
 	pilot, err := models.FindPilot(db, id)
 	if err != nil {
 		log.Error("db: failed to get pilot", "id", id)
+		c.JSON(404, gin.H{"status": "404", "message": "Pilot not found"})
+		c.Abort()
 	}
 
 	log.Info("db: fetched pilot", "id", id)
@@ -37,6 +39,8 @@ func (route PilotRoutes) GetAll(c *gin.Context) {
 	pilots, err := models.Pilots(db).All()
 	if err != nil {
 		log.Error("db: failed to get pilots", "err", err)
+		c.JSON(500, gin.H{"status": "500", "message": "Failed to fetch Pilots"})
+		c.Abort()
 	}
 
 	log.Info("db: fetched pilots", "count", len(pilots))
@@ -51,6 +55,8 @@ func (route PilotRoutes) Create(c *gin.Context) {
 	var json models.Pilot
 	if c.BindJSON(&json) != nil {
 		log.Error("gin: error creating pilot")
+		c.JSON(400, gin.H{"status": "400", "message": "Request JSON isn't valid"})
+		c.Abort()
 	}
 
 	pilot := &models.Pilot{
@@ -58,10 +64,12 @@ func (route PilotRoutes) Create(c *gin.Context) {
 	}
 	if err := pilot.Insert(db); err != nil {
 		log.Error("db: failed to insert pilot", "err", err)
+		c.JSON(500, gin.H{"status": "500", "message": "Failed to insert Pilot"})
+		c.Abort()
 	}
 
 	log.Info("db: insterted pilot", "id", pilot.ID)
-	c.JSON(200, gin.H{"message": "Article created", "id": pilot.ID})
+	c.JSON(201, gin.H{"message": "Pilot created", "id": pilot.ID})
 }
 
 // Update : Attempts to update the pilot matching the passed id
@@ -79,9 +87,12 @@ func (route PilotRoutes) Update(c *gin.Context) {
 	pilot.Name = json.Name
 	if err := pilot.Update(db); err != nil {
 		log.Error("db: failed to update pilot", "id", id, "err", err)
+		c.JSON(500, gin.H{"status": "500", "message": "Failed to update Pilot"})
+		c.Abort()
 	}
 
 	log.Info("db: updated pilot", "id", id)
+	c.JSON(200, gin.H{"message": "Pilot updated", "id": pilot.ID})
 }
 
 // Delete : Attempts to delete the pilot matching the passed id
@@ -93,8 +104,11 @@ func (route PilotRoutes) Delete(c *gin.Context) {
 
 	pilot, _ := models.FindPilot(db, id)
 	if err := pilot.Delete(db); err != nil {
-		log.Error("db: failed to delete pilot", "id", id, "err", err)
+		log.Error("db: failed to delete pilot", "id", id)
+		c.JSON(500, gin.H{"status": "500", "message": "Failed to delete Pilot"})
+		c.Abort()
 	}
 
 	log.Info("db: deleted pilot", "id", id)
+	c.JSON(204, gin.H{"message": "Pilot deleted", "id": pilot.ID})
 }
