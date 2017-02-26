@@ -77,7 +77,6 @@ func TestCreatePilot(t *testing.T) {
 }
 
 // TestGetPilot : Assert pilot fetch - must return 200
-// (TODO: Check Pilot name with above test)
 func TestGetPilot(t *testing.T) {
 	testRouter := SetupRouter()
 
@@ -90,7 +89,22 @@ func TestGetPilot(t *testing.T) {
 	res := httptest.NewRecorder()
 
 	testRouter.ServeHTTP(res, req)
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	resp := struct {
+		ID   int
+		Name string
+	}{}
+
+	json.Unmarshal(body, &resp)
+	pilotID = resp.ID
+
 	assert.Equal(t, res.Code, 200)
+	assert.Equal(t, resp.Name, "Adam")
 }
 
 // TestDeletePilot : Assert pilot deletion - must return 200
