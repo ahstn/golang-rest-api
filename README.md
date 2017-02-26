@@ -1,10 +1,11 @@
 # Go Rest API
 Example Rest API in Go using [Gin], [SqlBoiler], [Log15] and [Postgres]
+[![Go Report Card](https://goreportcard.com/badge/github.com/phazyy/golang-rest-api)](https://goreportcard.com/report/github.com/phazyy/golang-rest-api)
 
 ## Todo
 - [x] Basic CRUD Functionality
 - [ ] Get entity relationship data
-- [ ] Validation of input
+- [ ] Validation of input (409 if entity exists, 400 if invalid req)
 - [ ] API Auth
 - [ ] HTTP error handling (returning 404, 403, Adding status code to response payload)
 - [ ] Testing and code coverage
