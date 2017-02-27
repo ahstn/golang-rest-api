@@ -46,7 +46,7 @@ func main() {
 	r.Run()
 }
 
-// TestCreatePilot : Assert pilot creation - must return 200
+// TestCreatePilot : Assert pilot creation - must return 201
 func TestCreatePilot(t *testing.T) {
 	testRouter := SetupRouter()
 	testPilot := &models.Pilot{Name: "Adam"}
@@ -107,7 +107,27 @@ func TestGetPilot(t *testing.T) {
 	assert.Equal(t, resp.Name, "Adam")
 }
 
-// TestDeletePilot : Assert pilot deletion - must return 200
+// TestUpdatePilot : Assert pilot update - must return 200
+func TestUpdatePilot(t *testing.T) {
+	testRouter := SetupRouter()
+	testPilot := &models.Pilot{Name: "updateAdam"}
+
+	data, _ := json.Marshal(testPilot)
+	url := fmt.Sprintf("/v1/pilots/%d", pilotID)
+	req, err := http.NewRequest("PUT", url, bytes.NewBufferString(string(data)))
+
+	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	res := httptest.NewRecorder()
+	testRouter.ServeHTTP(res, req)
+
+	assert.Equal(t, res.Code, 200)
+}
+
+// TestDeletePilot : Assert pilot deletion - must return 204
 func TestDeletePilot(t *testing.T) {
 	testRouter := SetupRouter()
 
