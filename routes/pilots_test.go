@@ -76,6 +76,22 @@ func TestCreatePilot(t *testing.T) {
 	assert.Equal(t, res.Code, 201)
 }
 
+// TestCreateInvalidPilot : Assert invalid pilot create - must return 400
+func TestCreateInvalidPilot(t *testing.T) {
+	testRouter := SetupRouter()
+
+	req, err := http.NewRequest("POST", "/v1/pilots", bytes.NewBufferString("Test"))
+	req.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	res := httptest.NewRecorder()
+
+	testRouter.ServeHTTP(res, req)
+	assert.Equal(t, res.Code, 400)
+}
+
 // TestGetPilot : Assert pilot fetch - must return 200
 func TestGetPilot(t *testing.T) {
 	testRouter := SetupRouter()
@@ -87,7 +103,6 @@ func TestGetPilot(t *testing.T) {
 	}
 
 	res := httptest.NewRecorder()
-
 	testRouter.ServeHTTP(res, req)
 
 	body, err := ioutil.ReadAll(res.Body)
@@ -105,6 +120,22 @@ func TestGetPilot(t *testing.T) {
 
 	assert.Equal(t, res.Code, 200)
 	assert.Equal(t, resp.Name, "Adam")
+}
+
+// TestGetInvalidPilot : Assert negative pilot fetch - must return 404
+func TestGetInvalidPilot(t *testing.T) {
+	testRouter := SetupRouter()
+
+	url := fmt.Sprintf("/v1/pilots/%d", pilotID+1)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	res := httptest.NewRecorder()
+
+	testRouter.ServeHTTP(res, req)
+	assert.Equal(t, res.Code, 404)
 }
 
 // TestUpdatePilot : Assert pilot update - must return 200
