@@ -1,6 +1,8 @@
 # Go Rest API
-Example Rest API in Go using [Gin], [SqlBoiler], [Log15] and [Postgres]
 [![Go Report Card](https://goreportcard.com/badge/github.com/phazyy/golang-rest-api)](https://goreportcard.com/report/github.com/phazyy/golang-rest-api)
+
+Example Rest API in Go using [Gin], [SqlBoiler], [Log15] and [Postgres]
+
 
 ## Todo
 - [x] Basic CRUD Functionality
