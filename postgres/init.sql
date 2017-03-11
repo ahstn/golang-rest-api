@@ -1,3 +1,5 @@
+GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
+
 CREATE TABLE pilots (
   id serial NOT NULL,
   name text NOT NULL
